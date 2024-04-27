@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://bl7n3uud4q3gp"]
+
+[ext_resource type="Script" path="res://script/action.gd" id="1_1w2jf"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kodym"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aqhgb"]
+transparency = 1
+albedo_color = Color(0, 1, 0, 0.266667)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wif0y"]
+material = SubResource("StandardMaterial3D_aqhgb")
+
+[node name="Action" type="Area3D" groups=["action"]]
+script = ExtResource("1_1w2jf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_kodym")
+
+[node name="Collision" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_wif0y")

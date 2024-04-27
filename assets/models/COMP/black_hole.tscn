@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://nsyy1l4iyjrr"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_fr2l8"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bmr28"]
+shading_mode = 0
+albedo_color = Color(0, 0, 0, 1)
+
+[node name="BlackHole" type="Node3D"]
+
+[node name="block" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_fr2l8")
+surface_material_override/0 = SubResource("StandardMaterial3D_bmr28")

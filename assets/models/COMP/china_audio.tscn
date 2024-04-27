@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://cryyd1uays1u5"]
+
+[ext_resource type="AudioStream" uid="uid://b8totu0ihfhn4" path="res://sounds/noice/china_call.mp3" id="1_3b5wa"]
+[ext_resource type="Texture2D" uid="uid://cntee35x7lyvr" path="res://assets/items_view/phone/texture.png" id="1_bxgu6"]
+
+[sub_resource type="GDScript" id="GDScript_46ai1"]
+script/source = "extends Node3D
+
+func _on_audio_stream_player_3d_finished() -> void:
+	queue_free()
+"
+
+[node name="ChinaAudio" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+script = SubResource("GDScript_46ai1")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("1_3b5wa")
+unit_size = 2.0
+max_db = -20.0
+autoplay = true
+max_distance = 60.0
+attenuation_filter_db = 0.0
+
+[node name="model" type="Sprite3D" parent="."]
+transform = Transform3D(0.119752, 0, 0, 0, 0.119752, 0, 0, 0, 0.119752, 0, 0, 0)
+billboard = 2
+texture = ExtResource("1_bxgu6")
+
+[connection signal="finished" from="AudioStreamPlayer3D" to="." method="_on_audio_stream_player_3d_finished"]

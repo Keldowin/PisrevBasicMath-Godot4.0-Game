@@ -1,0 +1,146 @@
+[gd_scene load_steps=15 format=3 uid="uid://6mwou8l1o7hc"]
+
+[ext_resource type="Texture2D" uid="uid://cf05ft5w82e2a" path="res://assets/textures/enemys/pisarev/Pisarev_state.png" id="1_2wce1"]
+[ext_resource type="Script" path="res://enemys/pisarev.gd" id="1_qlpau"]
+[ext_resource type="Texture2D" uid="uid://ceksli6f771vg" path="res://assets/textures/enemys/pisarev/Pisarev_talk.png" id="3_2pph7"]
+[ext_resource type="Texture2D" uid="uid://cpvbpj4meppg3" path="res://assets/textures/graphics/shadow.png" id="3_mwaqe"]
+[ext_resource type="AudioStream" uid="uid://kj3n2dujgyil" path="res://sounds/pisarev/ruler-slap.wav" id="4_jafnj"]
+[ext_resource type="AudioStream" uid="uid://0j8ttcmmtgek" path="res://sounds/pisarev/scream.mp3" id="5_y31qb"]
+[ext_resource type="AudioStream" uid="uid://bwluiiqqtkff" path="res://sounds/pisarev/love_mama.mp3" id="6_h1ssj"]
+[ext_resource type="AudioStream" uid="uid://ctwy6yu6e8464" path="res://sounds/pisarev/where_run.mp3" id="7_p0deq"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2fdoe"]
+radius = 0.241602
+height = 2.87469
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4fdq2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_2wce1")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_2pph7")
+}],
+"loop": true,
+"name": &"Scream",
+"speed": 5.0
+}]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_d1g3o"]
+streams_count = 2
+stream_0/stream = ExtResource("6_h1ssj")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("7_p0deq")
+stream_1/weight = 1.0
+
+[sub_resource type="GDScript" id="GDScript_tfc6b"]
+script/source = "extends AudioStreamPlayer3D
+
+@onready var pisarev: PisarevNPC = $\"..\"
+@onready var timer: Timer = $timer
+
+func _on_timer_timeout() -> void:
+	if pisarev.state == 0: return
+	
+	if Pack.work_done == 5:
+		timer.stop()
+		return
+	
+	play()
+"
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_gosvw"]
+radius = 1.72969
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_uy4dq"]
+radius = 10.7419
+
+[node name="Pisarev" type="CharacterBody3D"]
+collision_mask = 16
+script = ExtResource("1_qlpau")
+nav_agent_node = NodePath("NavigationAgent3D")
+range_node = NodePath("Range")
+movement_speed = 6.0
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_postprocessing = 1
+avoidance_enabled = true
+height = 2.88
+radius = 0.6
+use_3d_avoidance = true
+debug_enabled = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.44936, 0)
+shape = SubResource("CapsuleShape3D_2fdoe")
+
+[node name="Model" type="AnimatedSprite3D" parent="."]
+transform = Transform3D(0.477462, 0, 0, 0, 0.410025, 0, 0, 0, 0.328079, 0, 1.42883, -0.0224094)
+billboard = 2
+texture_filter = 0
+sprite_frames = SubResource("SpriteFrames_4fdq2")
+animation = &"Idle"
+
+[node name="shadow" type="Sprite3D" parent="."]
+transform = Transform3D(0.359972, 0, 0, 0, -1.57349e-08, -0.359972, 0, 0.359972, -1.57349e-08, 0, 0.05, 0)
+modulate = Color(1, 1, 1, 0.352941)
+texture_filter = 0
+render_priority = -1
+texture = ExtResource("3_mwaqe")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.0
+
+[node name="slap" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00267887, 1.57129, -0.000341296)
+stream = ExtResource("4_jafnj")
+volume_db = -20.0
+unit_size = 15.0
+max_db = -3.0
+max_distance = 50.0
+attenuation_filter_db = 0.0
+
+[node name="say" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00267887, 1.57129, -0.000341296)
+stream = SubResource("AudioStreamRandomizer_d1g3o")
+volume_db = -10.0
+unit_size = 15.0
+max_db = -3.0
+max_distance = 50.0
+attenuation_filter_db = 0.0
+script = SubResource("GDScript_tfc6b")
+
+[node name="timer" type="Timer" parent="say"]
+wait_time = 30.0
+
+[node name="Range" type="Area3D" parent="."]
+collision_layer = 17
+collision_mask = 17
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Range"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.63627, -0.0501831)
+shape = SubResource("SphereShape3D_gosvw")
+
+[node name="Vision" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Vision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.69514, 0)
+shape = SubResource("SphereShape3D_uy4dq")
+
+[node name="Screamer" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="Screamer"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -0.055, 2.42, -0.902)
+far = 100.0
+
+[node name="Scim" type="AudioStreamPlayer" parent="Screamer"]
+stream = ExtResource("5_y31qb")
+
+[connection signal="timeout" from="say/timer" to="say" method="_on_timer_timeout"]
+[connection signal="body_entered" from="Vision" to="." method="_on_vision_body_entered"]

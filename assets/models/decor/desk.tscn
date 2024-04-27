@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://bp0tbrn66e6vq"]
+
+[ext_resource type="Texture2D" uid="uid://rrpa6m8nwie8" path="res://assets/textures/desk/desk.png" id="1_0cail"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_f2frj"]
+size = Vector2(5, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s6ffp"]
+transparency = 1
+albedo_texture = ExtResource("1_0cail")
+metallic = 0.18
+metallic_specular = 0.16
+roughness = 0.9
+
+[node name="Desk" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("QuadMesh_f2frj")
+surface_material_override/0 = SubResource("StandardMaterial3D_s6ffp")

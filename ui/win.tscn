@@ -1,0 +1,74 @@
+[gd_scene load_steps=7 format=3 uid="uid://ceilm22alght7"]
+
+[ext_resource type="Theme" uid="uid://k46f0s05vcwm" path="res://media/themes/MainTheme.tres" id="1_ey24l"]
+[ext_resource type="Script" path="res://ui/win.gd" id="2_2s3dx"]
+[ext_resource type="Texture2D" uid="uid://cf05ft5w82e2a" path="res://assets/textures/enemys/pisarev/Pisarev_state.png" id="3_qlgr7"]
+[ext_resource type="AudioStream" uid="uid://bb2qtjayuurod" path="res://sounds/pisarev/win.mp3" id="4_5frlv"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_oudoo"]
+font_size = 48
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_rowrj"]
+font_size = 36
+font_color = Color(1, 0, 0, 1)
+
+[node name="win" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_ey24l")
+script = ExtResource("2_2s3dx")
+
+[node name="BG" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="win_text" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -704.0
+offset_top = -161.0
+offset_right = -54.0
+offset_bottom = 186.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "Ура! Ты исправил все работы!
+
+Теперь можно спать спокойной"
+label_settings = SubResource("LabelSettings_oudoo")
+autowrap_mode = 2
+
+[node name="pisarev" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 31.0
+offset_top = 123.0
+offset_right = 505.0
+offset_bottom = 1159.0
+texture = ExtResource("3_qlgr7")
+
+[node name="new_record" type="Label" parent="."]
+layout_mode = 0
+offset_left = 708.0
+offset_top = 593.0
+offset_right = 980.0
+offset_bottom = 643.0
+text = "Новый рекорд!"
+label_settings = SubResource("LabelSettings_rowrj")
+
+[node name="win_sound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_5frlv")
+volume_db = -15.0
+autoplay = true

@@ -1,0 +1,410 @@
+[gd_scene load_steps=20 format=3 uid="uid://csqkvhcmgl0ei"]
+
+[ext_resource type="Theme" uid="uid://k46f0s05vcwm" path="res://media/themes/MainTheme.tres" id="1_07ukn"]
+[ext_resource type="Script" path="res://ui/menu.gd" id="2_xj71j"]
+[ext_resource type="Texture2D" uid="uid://rrpa6m8nwie8" path="res://assets/textures/desk/desk.png" id="3_3giq7"]
+[ext_resource type="Shader" path="res://assets/shaders/2d_shadow.gdshader" id="3_xkwn1"]
+[ext_resource type="Texture2D" uid="uid://cf05ft5w82e2a" path="res://assets/textures/enemys/pisarev/Pisarev_state.png" id="5_522r8"]
+[ext_resource type="AudioStream" uid="uid://ceo51wffigpyb" path="res://sounds/music/main.mp3" id="5_lvaf8"]
+[ext_resource type="AudioStream" uid="uid://cxiiuqgwgcmtn" path="res://sounds/pisarev/menu.mp3" id="6_fok5v"]
+[ext_resource type="Script" path="res://ui/time_record.gd" id="7_wcmkq"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_e3crh"]
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_53cvj"]
+font_size = 55
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0kcpg"]
+shader = ExtResource("3_xkwn1")
+shader_parameter/deform = Vector2(0.055, 5.45)
+shader_parameter/offset = Vector2(0, 0)
+shader_parameter/modulate = Color(0, 0, 0, 0.192157)
+shader_parameter/x_buffer = 0.945
+shader_parameter/y_buffer = 1.015
+
+[sub_resource type="LabelSettings" id="LabelSettings_01vna"]
+font_size = 20
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_dw61q"]
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="GDScript" id="GDScript_pkss1"]
+script/source = "extends Control
+
+@onready var sensetiv_sroll : HSlider = $HSlider
+@onready var sensetiv_count : Label = $HSlider/Count
+
+## Опять тупые сохранения
+var setting_data_local : Dictionary = {
+	'sensetiv' : 0.003
+}
+
+func _ready() -> void:
+	#Загрузка настроек из сохранения
+	var load_setting = FileSystem.load_data(\"setting\")
+	
+	if load_setting:
+		#Проверка целостности ключей настроек
+		setting_data_local = load_setting #Загрузка в локальный массив настроек
+		#print_debug(\"Load old settings\")
+	else:
+		#Создание новых настроек графики исходя из локального словоря настроек
+		FileSystem.save_data(\"setting\", setting_data_local)
+		#print_debug(\"Load new settings\")
+		
+	
+	sensetiv_sroll.value = setting_data_local['sensetiv']
+	sensetiv_count.text = str(setting_data_local['sensetiv'])
+	
+	Global.settings_data = setting_data_local
+
+func _on_h_slider_value_changed(value: float) -> void:
+	sensetiv_count.text = str(value)
+	setting_data_local['sensetiv'] = value
+
+## Выход и сохранение значений
+func _on_exit_pressed() -> void:
+	FileSystem.save_data(\"setting\", setting_data_local)
+	
+	Global.settings_data = setting_data_local
+
+	print('значение сохранено')
+	hide()
+"
+
+[sub_resource type="LabelSettings" id="LabelSettings_6r25o"]
+font_size = 36
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_6ux4r"]
+font_size = 24
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="GDScript" id="GDScript_7w25y"]
+script/source = "extends Control
+
+func _ready() -> void:
+	hide()
+
+
+func _on_thanks_button_pressed() -> void:
+	show()
+
+func _on_exit_pressed() -> void:
+	hide()
+"
+
+[sub_resource type="LabelSettings" id="LabelSettings_ncjc6"]
+font_size = 32
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="GDScript" id="GDScript_k1dk3"]
+script/source = "extends AudioStreamPlayer
+
+func _ready() -> void:
+	await get_tree().create_timer(2.0).timeout
+	
+	play()
+"
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_07ukn")
+script = ExtResource("2_xj71j")
+
+[node name="BG" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="bar" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 40.0
+color = Color(0.847474, 0.847474, 0.847474, 1)
+
+[node name="url" type="Label" parent="bar"]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 9.0
+offset_right = 226.0
+offset_bottom = 32.0
+text = "https://www.pisarev-math.ru/menu"
+label_settings = SubResource("LabelSettings_e3crh")
+
+[node name="Desk" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 536.0
+offset_top = 148.0
+offset_right = 1840.0
+offset_bottom = 654.0
+scale = Vector2(0.505751, 0.544466)
+texture = ExtResource("3_3giq7")
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 56.0
+offset_right = 854.0
+offset_bottom = 132.0
+text = "Изучаем математику с Писаревым online!"
+label_settings = SubResource("LabelSettings_53cvj")
+
+[node name="PisarevState" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_0kcpg")
+layout_mode = 0
+offset_left = 661.0
+offset_top = 216.0
+offset_right = 929.0
+offset_bottom = 934.0
+scale = Vector2(0.742537, 0.665738)
+texture = ExtResource("5_522r8")
+
+[node name="Buttons" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Play" type="Button" parent="Buttons"]
+layout_mode = 0
+offset_left = 49.0
+offset_top = 288.0
+offset_right = 378.0
+offset_bottom = 375.0
+text = "Подключиться"
+
+[node name="Settings" type="Button" parent="Buttons"]
+layout_mode = 0
+offset_left = 49.0
+offset_top = 400.0
+offset_right = 378.0
+offset_bottom = 487.0
+text = "Настройки"
+
+[node name="Exit" type="Button" parent="Buttons"]
+layout_mode = 0
+offset_left = 49.0
+offset_top = 509.0
+offset_right = 378.0
+offset_bottom = 596.0
+text = "Выйти"
+
+[node name="CreditAndVersion" type="Label" parent="."]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 683.0
+offset_right = 238.0
+offset_bottom = 711.0
+text = "Сделал Keldowin | Версия: 1.0"
+label_settings = SubResource("LabelSettings_01vna")
+
+[node name="thanks_button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1041.0
+offset_top = 648.0
+offset_right = 1264.0
+offset_bottom = 708.0
+theme_override_font_sizes/font_size = 16
+text = "Благодарности"
+
+[node name="time_record" type="Label" parent="."]
+layout_mode = 0
+offset_left = 49.0
+offset_top = 216.0
+offset_right = 378.0
+offset_bottom = 270.0
+text = "Рекорд прохождения - 1:00"
+label_settings = SubResource("LabelSettings_dw61q")
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("7_wcmkq")
+
+[node name="Setting" type="Control" parent="."]
+visible = false
+anchors_preset = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+script = SubResource("GDScript_pkss1")
+
+[node name="BG" type="ColorRect" parent="Setting"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="Title" type="Label" parent="Setting"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 32.0
+offset_right = 70.0
+offset_bottom = 55.0
+text = "Настройки"
+label_settings = SubResource("LabelSettings_6r25o")
+
+[node name="Screen" type="Label" parent="Setting"]
+layout_mode = 0
+offset_left = 49.0
+offset_top = 112.0
+offset_right = 200.0
+offset_bottom = 146.0
+text = "Чувствительность"
+label_settings = SubResource("LabelSettings_6ux4r")
+
+[node name="HSlider" type="HSlider" parent="Setting"]
+layout_mode = 0
+offset_left = 49.0
+offset_top = 148.0
+offset_right = 289.0
+offset_bottom = 164.0
+min_value = 0.001
+max_value = 0.01
+step = 0.001
+value = 0.003
+
+[node name="Title" type="Label" parent="Setting/HSlider"]
+layout_mode = 0
+offset_top = 50.0
+offset_right = 151.0
+offset_bottom = 84.0
+text = "Во весь экран на [F11]
+
+[SHIFT] - Бегать
+[Левая кнопка мыши] - Взять/Открыть/Использовать (предмет)
+[Правая кнопка мыши] - Использовать предмет"
+label_settings = SubResource("LabelSettings_6ux4r")
+
+[node name="Count" type="Label" parent="Setting/HSlider"]
+layout_mode = 0
+offset_left = 247.0
+offset_top = -10.0
+offset_right = 398.0
+offset_bottom = 24.0
+text = "0.001"
+label_settings = SubResource("LabelSettings_6ux4r")
+
+[node name="Exit" type="Button" parent="Setting"]
+layout_mode = 0
+offset_left = 1030.0
+offset_top = 648.0
+offset_right = 1264.0
+offset_bottom = 708.0
+mouse_default_cursor_shape = 2
+text = "Выйти"
+
+[node name="Thanks" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_7w25y")
+
+[node name="BG" type="ColorRect" parent="Thanks"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Screenshots" type="Control" parent="Thanks"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="photo1" type="TextureRect" parent="Thanks/Screenshots"]
+layout_mode = 0
+offset_left = 776.0
+offset_top = 123.0
+offset_right = 1221.0
+offset_bottom = 391.0
+expand_mode = 1
+
+[node name="photo2" type="TextureRect" parent="Thanks/Screenshots"]
+layout_mode = 0
+offset_left = 49.0
+offset_top = 270.0
+offset_right = 551.0
+offset_bottom = 596.0
+expand_mode = 1
+
+[node name="photo3" type="TextureRect" parent="Thanks/Screenshots"]
+layout_mode = 0
+offset_left = 416.0
+offset_top = 382.0
+offset_right = 918.0
+offset_bottom = 708.0
+expand_mode = 1
+
+[node name="photo4" type="TextureRect" parent="Thanks/Screenshots"]
+layout_mode = 0
+offset_left = 453.0
+offset_top = 189.0
+offset_right = 787.0
+offset_bottom = 397.0
+expand_mode = 1
+
+[node name="Title" type="Label" parent="Thanks"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 32.0
+offset_right = 778.0
+offset_bottom = 82.0
+text = "Благодарности за участие в разработке игры:"
+label_settings = SubResource("LabelSettings_ncjc6")
+
+[node name="text" type="RichTextLabel" parent="Thanks"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 82.0
+offset_right = 570.0
+offset_bottom = 191.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 24
+text = "Персонажи: Мистер ПИ, Глеб, Дима, Денис
+Озвучка ПИ: Миша
+Тестировщик: Wedfill"
+
+[node name="exit" type="Button" parent="Thanks"]
+layout_mode = 0
+offset_left = 1030.0
+offset_top = 648.0
+offset_right = 1264.0
+offset_bottom = 708.0
+theme_override_font_sizes/font_size = 16
+text = "Класс!"
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_lvaf8")
+volume_db = -20.0
+autoplay = true
+
+[node name="pisarev_say" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_fok5v")
+volume_db = -10.0
+script = SubResource("GDScript_k1dk3")
+
+[connection signal="pressed" from="thanks_button" to="Thanks" method="_on_thanks_button_pressed"]
+[connection signal="value_changed" from="Setting/HSlider" to="Setting" method="_on_h_slider_value_changed"]
+[connection signal="pressed" from="Setting/Exit" to="Setting" method="_on_exit_pressed"]
+[connection signal="pressed" from="Thanks/exit" to="Thanks" method="_on_exit_pressed"]

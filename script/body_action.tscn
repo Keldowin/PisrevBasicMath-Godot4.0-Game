@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://b7vj81lcw3223"]
+
+[ext_resource type="Script" path="res://script/body_action.gd" id="1_qbo3y"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rdhb3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7sgdw"]
+transparency = 1
+albedo_color = Color(0, 0, 1, 0.447059)
+
+[sub_resource type="BoxMesh" id="BoxMesh_c0skq"]
+material = SubResource("StandardMaterial3D_7sgdw")
+
+[node name="body_action" type="Area3D"]
+script = ExtResource("1_qbo3y")
+on_player = null
+on_remove = null
+
+[node name="collision_shape_3d" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_rdhb3")
+
+[node name="mesh_instance_3d" type="MeshInstance3D" parent="collision_shape_3d"]
+mesh = SubResource("BoxMesh_c0skq")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

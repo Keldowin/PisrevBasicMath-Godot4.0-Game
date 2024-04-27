@@ -1,0 +1,12 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://d2tdise8x6brx"]
+
+[ext_resource type="Texture2D" uid="uid://bsewotwlywcm8" path="res://assets/textures/ceiling/concrete_wall_008_diff_1k.jpg" id="1_4pb08"]
+[ext_resource type="Texture2D" uid="uid://5nd3i1v47ckv" path="res://assets/textures/ceiling/NormalMap.png" id="2_ukp4q"]
+
+[resource]
+albedo_color = Color(0.589096, 0.589096, 0.589095, 1)
+albedo_texture = ExtResource("1_4pb08")
+normal_enabled = true
+normal_texture = ExtResource("2_ukp4q")
+uv1_triplanar = true
+uv1_world_triplanar = true

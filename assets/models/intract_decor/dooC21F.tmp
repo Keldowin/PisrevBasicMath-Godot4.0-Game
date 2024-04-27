@@ -1,0 +1,64 @@
+[gd_scene load_steps=8 format=3 uid="uid://bno1u3kgec7yk"]
+
+[ext_resource type="Script" path="res://script/door.gd" id="1_hyd7i"]
+[ext_resource type="PackedScene" uid="uid://bl7n3uud4q3gp" path="res://script/action.tscn" id="2_1tg3f"]
+[ext_resource type="Texture2D" uid="uid://5lphva6pj8of" path="res://assets/textures/door/door_slim_closed.png" id="2_280u4"]
+[ext_resource type="AudioStream" uid="uid://d4d27cjfenycu" path="res://sounds/decor/door/door.mp3" id="3_ubqok"]
+[ext_resource type="Texture2D" uid="uid://d2qjgvuusmcc6" path="res://assets/textures/door/door_slim_open.png" id="3_w8lyr"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qvxfo"]
+size = Vector3(2.14056, 3.41345, 0.350311)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_sa7ei"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_280u4")
+}],
+"loop": true,
+"name": &"Close",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_w8lyr")
+}],
+"loop": true,
+"name": &"Open",
+"speed": 5.0
+}]
+
+[node name="DoorSlim" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6918, 0)
+script = ExtResource("1_hyd7i")
+door_node = NodePath("Door")
+collision_node = NodePath("StaticBody3D/CollisionShape3D")
+timer_node = NodePath("Timer")
+open_sound_node = NodePath("Opensound")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_mask = 16
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00888062, 0.0245975, 0.0188446)
+shape = SubResource("BoxShape3D_qvxfo")
+
+[node name="Door" type="AnimatedSprite3D" parent="."]
+transform = Transform3D(0.405779, 0, 0, 0, 0.339305, 0, 0, 0, 0.318982, 0, 0, 0)
+sprite_frames = SubResource("SpriteFrames_sa7ei")
+animation = &"Close"
+
+[node name="Action" parent="." instance=ExtResource("2_1tg3f")]
+transform = Transform3D(2.20897, 0, 0, 0, 3.49106, 0, 0, 0, 0.34809, 0.00314277, 0, 0.0214057)
+on_parent = "open"
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="Opensound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_ubqok")
+volume_db = -20.0
+attenuation_filter_db = 0.0
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

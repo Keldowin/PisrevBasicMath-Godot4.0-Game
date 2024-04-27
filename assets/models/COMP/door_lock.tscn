@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://dewao6f1gnrv3"]
+
+[ext_resource type="Texture2D" uid="uid://v2kg6mu1c1w7" path="res://assets/lock/texture.png" id="1_3jixx"]
+
+[node name="DoorLock" type="Node3D"]
+
+[node name="lock" type="Sprite3D" parent="."]
+transform = Transform3D(0.0997959, 0, 0, 0, 0.0997959, 0, 0, 0, 0.0997959, 0, 0, 0.333477)
+texture = ExtResource("1_3jixx")
+
+[node name="lock2" type="Sprite3D" parent="."]
+transform = Transform3D(0.0997959, 0, 0, 0, 0.0997959, 0, 0, 0, 0.0997959, 0, 0, -0.268917)
+texture = ExtResource("1_3jixx")

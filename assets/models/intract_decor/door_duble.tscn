@@ -1,0 +1,78 @@
+[gd_scene load_steps=10 format=3 uid="uid://clt5c3xluj6jh"]
+
+[ext_resource type="Texture2D" uid="uid://do2d8io5i2rrq" path="res://assets/textures/door/door_metal_closed.png" id="1_4o0mq"]
+[ext_resource type="Script" path="res://script/door.gd" id="1_u7ldo"]
+[ext_resource type="PackedScene" uid="uid://bl7n3uud4q3gp" path="res://script/action.tscn" id="2_3d0sg"]
+[ext_resource type="Texture2D" uid="uid://bisycolerqlfa" path="res://assets/textures/door/door_metal_open.png" id="2_4lkbr"]
+[ext_resource type="AudioStream" uid="uid://d4d27cjfenycu" path="res://sounds/decor/door/door.mp3" id="3_55l5o"]
+[ext_resource type="AudioStream" uid="uid://44l2xh5eqsa1" path="res://sounds/decor/door/door_close.wav" id="6_c12mw"]
+[ext_resource type="PackedScene" uid="uid://dewao6f1gnrv3" path="res://assets/models/COMP/door_lock.tscn" id="7_c72ul"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qvxfo"]
+size = Vector3(3.75402, 3.57759, 0.350311)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_yu20o"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_4o0mq")
+}],
+"loop": true,
+"name": &"Close",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_4lkbr")
+}],
+"loop": true,
+"name": &"Open",
+"speed": 5.0
+}]
+
+[node name="DoorDuable" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.72435, 0)
+script = ExtResource("1_u7ldo")
+door_node = NodePath("Door")
+collision_node = NodePath("Door2/CollisionShape3D")
+timer_node = NodePath("Timer")
+open_sound_node = NodePath("Opensound")
+close_sound_node = NodePath("Closesound")
+door_lock_node = NodePath("DoorLock")
+
+[node name="Door2" type="StaticBody3D" parent="." groups=["door"]]
+collision_layer = 16
+collision_mask = 17
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Door2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0113727, 0.0322752, 0.0188446)
+shape = SubResource("BoxShape3D_qvxfo")
+
+[node name="Door" type="AnimatedSprite3D" parent="."]
+transform = Transform3D(0.543927, 0, 0, 0, 0.48085, 0, 0, 0, 0.332, 0, 0.17788, 0)
+modulate = Color(0.77084, 0.770839, 0.770839, 1)
+sprite_frames = SubResource("SpriteFrames_yu20o")
+animation = &"Close"
+
+[node name="Action" parent="." instance=ExtResource("2_3d0sg")]
+transform = Transform3D(3.80211, 0, 0, 0, 3.66497, 0, 0, 0, 0.34809, 0.00314277, 0.228223, 0.0214057)
+collision_mask = 17
+on_parent = "open"
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 5.0
+
+[node name="Opensound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_55l5o")
+volume_db = -20.0
+attenuation_filter_db = 0.0
+
+[node name="Closesound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("6_c12mw")
+volume_db = -20.0
+attenuation_filter_db = 0.0
+
+[node name="DoorLock" parent="." instance=ExtResource("7_c72ul")]
+visible = false
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

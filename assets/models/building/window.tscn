@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://cmo7v3wia5jcp"]
+
+[ext_resource type="Texture2D" uid="uid://cvcyfxqsupnpo" path="res://assets/textures/window/window.png" id="1_4chbb"]
+
+[node name="Window" type="Node3D"]
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(0.285135, 0, 0, 0, 0.285135, 0, 0, 0, 0.285135, 0, 0, 0.0440298)
+modulate = Color(0.577008, 0.577008, 0.577008, 1)
+texture = ExtResource("1_4chbb")

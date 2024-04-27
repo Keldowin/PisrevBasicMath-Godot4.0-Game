@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://26doiphyiv53"]
+
+[ext_resource type="PackedScene" uid="uid://034hlps0bdi5" path="res://assets/models/building/metal.tscn" id="1_c83fu"]
+[ext_resource type="PackedScene" uid="uid://b4a7pth5myb4c" path="res://assets/models/building/wood.tscn" id="2_g78nb"]
+
+[node name="Chair" type="Node3D"]
+transform = Transform3D(0.65, 0, 0, 0, 0.65, 0, 0, 0, 0.65, 0, 0, 0)
+
+[node name="metal" parent="." instance=ExtResource("1_c83fu")]
+transform = Transform3D(0.1, 0, 0, 0, 1, 0, 0, 0, 0.3, 0.5, 0.5, 0)
+
+[node name="metal2" parent="." instance=ExtResource("1_c83fu")]
+transform = Transform3D(0.1, 0, 0, 0, 1, 0, 0, 0, 0.3, -0.5, 0.5, 0)
+
+[node name="metal5" parent="." instance=ExtResource("1_c83fu")]
+transform = Transform3D(0.1, 0, 0, 0, 0.965926, -0.0232937, 0, 0.258819, 0.0869333, -0.5, 1.5, 0.550331)
+
+[node name="metal6" parent="." instance=ExtResource("1_c83fu")]
+transform = Transform3D(0.1, 0, 0, 0, 0.965926, -0.0232937, 0, 0.258819, 0.0869333, 0.5, 1.5, 0.550331)
+
+[node name="metal3" parent="." instance=ExtResource("1_c83fu")]
+transform = Transform3D(-4.37114e-09, -0.15, 0, 0.1, -6.55671e-09, 0, 0, 0, 0.792, 0.5, 0, 0)
+
+[node name="metal4" parent="." instance=ExtResource("1_c83fu")]
+transform = Transform3D(-4.37114e-09, -0.15, 0, 0.1, -6.55671e-09, 0, 0, 0, 0.792, -0.5, 0, 0)
+
+[node name="wood" parent="." instance=ExtResource("2_g78nb")]
+transform = Transform3D(1.2, 0, 0, 0, -0.1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="wood2" parent="." instance=ExtResource("2_g78nb")]
+transform = Transform3D(1.2, 0, 0, 0, 0.0258819, -0.965926, 0, -0.0965926, -0.258819, 0, 1.8, 0.630331)

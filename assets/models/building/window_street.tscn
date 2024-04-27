@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://djgk05h821gby"]
+
+[ext_resource type="Texture2D" uid="uid://cx3i6oi0c4lrq" path="res://assets/textures/window/window_street.png" id="1_pbpds"]
+
+[node name="Window" type="Node3D"]
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(0.285135, 0, 0, 0, 0.285135, 0, 0, 0, 0.285135, 0, 0, -0.0297873)
+modulate = Color(0.556953, 0.556953, 0.556953, 1)
+texture = ExtResource("1_pbpds")

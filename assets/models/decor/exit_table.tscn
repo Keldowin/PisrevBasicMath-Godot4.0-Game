@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://c70731hcrkwxd"]
+
+[ext_resource type="Texture2D" uid="uid://c48duilfnm47c" path="res://assets/textures/exit/texture.png" id="1_01h83"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_f8e3r"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ybyt6"]
+albedo_texture = ExtResource("1_01h83")
+
+[node name="ExitTable" type="Node3D"]
+
+[node name="model" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.04023, 0, 0, 0, 0.548783, 0, 0, 0, 0.548783, 0, 0, 0)
+mesh = SubResource("QuadMesh_f8e3r")
+surface_material_override/0 = SubResource("StandardMaterial3D_ybyt6")

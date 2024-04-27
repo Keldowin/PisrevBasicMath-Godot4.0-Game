@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bg1o2tr5yoecu"]
+
+[ext_resource type="Texture2D" uid="uid://ceea0k7oofr0i" path="res://assets/items_view/paper/paper_with_text2.png" id="1_ctowm"]
+
+[node name="Paper" type="Node3D"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(3.0783, 0, 0, 0, 3.0783, 0, 0, 0, 3.0783, 0, 0, 0)
+billboard = 2
+texture = ExtResource("1_ctowm")

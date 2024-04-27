@@ -1,0 +1,79 @@
+[gd_scene load_steps=4 format=3 uid="uid://co7fyqqwcm4u3"]
+
+[sub_resource type="GDScript" id="GDScript_ctirv"]
+script/source = "extends Control
+
+func _ready() -> void:
+	await get_tree().create_timer(10.0).timeout
+	
+	get_tree().change_scene_to_packed(Global.menu_node)
+	
+func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed(\"ui_accept\"):
+		get_tree().change_scene_to_packed(Global.menu_node)
+"
+
+[sub_resource type="LabelSettings" id="LabelSettings_230am"]
+font_size = 64
+
+[sub_resource type="LabelSettings" id="LabelSettings_vq7qs"]
+font_size = 24
+
+[node name="Warning" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_ctirv")
+
+[node name="BG" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+metadata/_edit_lock_ = true
+
+[node name="warning_title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -360.0
+offset_bottom = -272.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "!!!ПРЕДУПРЕЖДЕНИЕ!!!"
+label_settings = SubResource("LabelSettings_230am")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="warning_text" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -566.0
+offset_top = -257.0
+offset_right = 566.0
+offset_bottom = 304.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "ИГРА НЕ СОЗДАНА ЧТОБЫ КОГО-ТО ОСКОРБИТЬ. Всё сделано лишь ради шутки, если что не подавайте на меня в суд я могу просто удалить эту игру :)
+(почта: keldowin@vk.com)
+
+Баги есть, ошибки есть, скримеры есть, рофл есть
+
+Наслаждайтесь!
+
+Жми [ПРОБЕЛ] чтобы играть"
+label_settings = SubResource("LabelSettings_vq7qs")
+horizontal_alignment = 1
+autowrap_mode = 3

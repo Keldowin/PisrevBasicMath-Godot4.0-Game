@@ -1,0 +1,65 @@
+[gd_scene load_steps=4 format=3 uid="uid://xhsrvyndnav5"]
+
+[ext_resource type="Theme" uid="uid://k46f0s05vcwm" path="res://media/themes/MainTheme.tres" id="1_f881j"]
+
+[sub_resource type="GDScript" id="GDScript_36lig"]
+script/source = "extends Control
+
+var loading_status : int
+
+var target_scene_path : String = 'res://locations/school.tscn'
+
+func _ready() -> void:
+	ResourceLoader.load_threaded_request(target_scene_path) #Загрузка сцены
+func _process(_delta:float) -> void:
+	loading_status = ResourceLoader.load_threaded_get_status(target_scene_path)
+	
+	# Check the loading status:
+	match loading_status:
+		ResourceLoader.THREAD_LOAD_LOADED:
+			# Когда сцена загрузилась меняем её:
+			get_tree().change_scene_to_packed(ResourceLoader.load_threaded_get(target_scene_path))
+		ResourceLoader.THREAD_LOAD_FAILED:
+			# Если какая-то ошибка в загрузке сцены:
+			OS.alert(\"FATAL ERROR: Ошибка в загрузке сцены, ресурсы сцены повреждены/неисправны\")
+			get_tree().quit(1)
+"
+
+[sub_resource type="LabelSettings" id="LabelSettings_yh1xc"]
+font_size = 64
+font_color = Color(0, 0, 0, 1)
+
+[node name="Loading" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_f881j")
+script = SubResource("GDScript_36lig")
+
+[node name="BG" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Загрузка..."
+label_settings = SubResource("LabelSettings_yh1xc")

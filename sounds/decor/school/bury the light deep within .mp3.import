@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ckg20rix05ajg"
+path="res://.godot/imported/bury the light deep within .mp3-697db704ddbd2bcc148a0711f057e099.mp3str"
+
+[deps]
+
+source_file="res://sounds/decor/school/bury the light deep within .mp3"
+dest_files=["res://.godot/imported/bury the light deep within .mp3-697db704ddbd2bcc148a0711f057e099.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

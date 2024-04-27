@@ -1,0 +1,104 @@
+[gd_scene load_steps=9 format=3 uid="uid://86tiy5t3f5vj"]
+
+[ext_resource type="Shader" path="res://assets/shaders/loadtiles.gdshader" id="1_rjocd"]
+[ext_resource type="Texture2D" uid="uid://dsegklylewmpk" path="res://assets/textures/blue_screen/blue_screen.webp" id="1_x070m"]
+[ext_resource type="AudioStream" uid="uid://b2kt1viw5weh6" path="res://sounds/noice/green_screen_windows_xp.mp3" id="3_5hu21"]
+
+[sub_resource type="GDScript" id="GDScript_4h67i"]
+script/source = "extends Control
+
+@onready var bg: TextureRect = $BG
+@onready var animation_player: AnimationPlayer = $BG/animation_player
+@onready var blue: AudioStreamPlayer = $blue
+
+func _ready() -> void:
+	bg.hide()
+	Global.pause_game()
+	Global.restart_all_variables()
+	
+	await get_tree().create_timer(2.5).timeout
+	
+	bg.show()
+	animation_player.play('open')
+	blue.play()
+	
+	
+	await get_tree().create_timer(5.0).timeout
+	
+	Global.restart_all_variables()
+	
+	get_tree().change_scene_to_packed(Global.menu_node)
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hmmsl"]
+shader = ExtResource("1_rjocd")
+shader_parameter/visible_rows = 0
+shader_parameter/offset = 0.0
+
+[sub_resource type="Animation" id="Animation_itij8"]
+resource_name = "open"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/visible_rows")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0, 30]
+}
+
+[sub_resource type="Animation" id="Animation_pqfki"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/visible_rows")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qe7lb"]
+_data = {
+"RESET": SubResource("Animation_pqfki"),
+"open": SubResource("Animation_itij8")
+}
+
+[node name="blue_screen" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_4h67i")
+
+[node name="BG" type="TextureRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_hmmsl")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_x070m")
+expand_mode = 1
+
+[node name="animation_player" type="AnimationPlayer" parent="BG"]
+deterministic = true
+libraries = {
+"": SubResource("AnimationLibrary_qe7lb")
+}
+
+[node name="blue" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_5hu21")
+volume_db = -20.0

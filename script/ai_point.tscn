@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://c73f3f1n8gon4"]
+
+[ext_resource type="Script" path="res://script/point.gd" id="1_xcjgb"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_vbp8p"]
+radial_segments = 12
+rings = 5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xbtrk"]
+transparency = 1
+albedo_color = Color(1, 0, 0, 0.568627)
+
+[node name="AiPoint" type="Node3D"]
+script = ExtResource("1_xcjgb")
+
+[node name="point" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_vbp8p")
+surface_material_override/0 = SubResource("StandardMaterial3D_xbtrk")
+
+[node name="debug_lable" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.755701, 0)
+billboard = 1
+text = "NONE"
+
+[node name="sprite_3d" type="Sprite3D" parent="."]

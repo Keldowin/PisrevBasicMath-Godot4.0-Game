@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dst078l3w41ag"
+path="res://.godot/imported/SQWOZ BAB.mp3-4450bfd97ae7dfad4d2188d6f5bb4228.mp3str"
+
+[deps]
+
+source_file="res://sounds/decor/school/SQWOZ BAB.mp3"
+dest_files=["res://.godot/imported/SQWOZ BAB.mp3-4450bfd97ae7dfad4d2188d6f5bb4228.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

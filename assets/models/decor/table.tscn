@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://bgmmnppytt4j3"]
+
+[ext_resource type="PackedScene" uid="uid://034hlps0bdi5" path="res://assets/models/building/metal.tscn" id="1_ch2fv"]
+[ext_resource type="PackedScene" uid="uid://b4a7pth5myb4c" path="res://assets/models/building/wood.tscn" id="2_q1ibt"]
+
+[node name="Table" type="Node3D"]
+transform = Transform3D(1.05, 0, 0, 0, 1.2, 0, 0, 0, 1.05, 0, 0, 0)
+
+[node name="metal" parent="." instance=ExtResource("1_ch2fv")]
+transform = Transform3D(0.1, 0, 0, 0, 1, 0, 0, 0, 0.3, -1, 0.5, 0)
+
+[node name="metal2" parent="." instance=ExtResource("1_ch2fv")]
+transform = Transform3D(0.1, 0, 0, 0, 1, 0, 0, 0, 0.3, 1, 0.5, 0)
+
+[node name="wood" parent="." instance=ExtResource("2_q1ibt")]
+transform = Transform3D(2.4, 0, 0, 0, 0.1, 0, 0, 0, 1, 0, 1, 0)

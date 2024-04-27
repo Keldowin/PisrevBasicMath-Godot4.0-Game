@@ -1,0 +1,70 @@
+[gd_scene load_steps=7 format=3 uid="uid://cw4xx0777dowr"]
+
+[ext_resource type="PackedScene" uid="uid://bl7n3uud4q3gp" path="res://script/action.tscn" id="1_24gh6"]
+[ext_resource type="Texture2D" uid="uid://d1pok2eyocy4s" path="res://assets/items_view/paper/paper_with_text.png" id="2_fon8m"]
+
+[sub_resource type="GDScript" id="GDScript_scftr"]
+script/source = "extends Node3D
+
+func work() -> void:
+	Global.gui.sub('work')
+"
+
+[sub_resource type="Animation" id="Animation_dmhyb"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("model:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_w8bof"]
+resource_name = "fly"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("model:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0.2, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4c7oy"]
+_data = {
+"RESET": SubResource("Animation_dmhyb"),
+"fly": SubResource("Animation_w8bof")
+}
+
+[node name="Paper" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+script = SubResource("GDScript_scftr")
+
+[node name="Action" parent="." instance=ExtResource("1_24gh6")]
+transform = Transform3D(0.729863, 0, 0, 0, 1.00164, 0, 0, 0, 0.729863, 0, 0, 0)
+item_id = &"paper_test"
+on_parent = "work"
+on_remove_parent = true
+
+[node name="model" type="Sprite3D" parent="."]
+transform = Transform3D(0.270239, 0, 0, 0, 0.270239, 0, 0, 0, 0.270239, 0, 0, 0)
+billboard = 2
+texture = ExtResource("2_fon8m")
+
+[node name="fly" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_4c7oy")
+}
+autoplay = "fly"
+speed_scale = 0.25

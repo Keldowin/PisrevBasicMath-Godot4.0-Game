@@ -1,0 +1,351 @@
+[gd_scene load_steps=20 format=3 uid="uid://bjgwx0g7uwfdw"]
+
+[ext_resource type="Script" path="res://addons/Basic FPS Player/Src/basic_player_startup.gd" id="1_6g4jr"]
+[ext_resource type="Script" path="res://script/player/player.gd" id="1_nr8c4"]
+[ext_resource type="AudioStream" uid="uid://dwrf4jf2wx4f7" path="res://sounds/steps/wood_step.mp3" id="2_2dmr2"]
+[ext_resource type="PackedScene" uid="uid://kmyakts4l64t" path="res://addons/Basic FPS Player/Src/basic_player_head.tscn" id="2_lreee"]
+[ext_resource type="Theme" uid="uid://k46f0s05vcwm" path="res://media/themes/MainTheme.tres" id="4_l6ogn"]
+[ext_resource type="Script" path="res://script/player/inventory_manager.gd" id="4_yb3jv"]
+[ext_resource type="Script" path="res://script/player/GUI.gd" id="7_phs7b"]
+[ext_resource type="Script" path="res://script/Slot.gd" id="8_44qu7"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_42pn1"]
+height = 2.6
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_c7i67"]
+
+[sub_resource type="GDScript" id="GDScript_gmqvr"]
+script/source = "extends Timer
+
+##Записываем каждую секунду наигранное время в конце когда игрока удаляют сохраняем это значение
+var play_time : int = 0 
+
+func _on_timeout() -> void:
+	play_time += 1
+	
+func _exit_tree() -> void:
+	print(\"play time out \" + str(play_time))
+	
+	if Global.records_data['game_win_record'] >= play_time or Global.game_failed: 
+		Global.game_failed = false
+		return
+	
+	print(\"play time record\")
+	
+	var records = FileSystem.load_data('records')
+	
+	if records.has('game_win_record'):
+		
+		records['game_win_record'] = play_time
+		
+		FileSystem.save_data('records', records)
+"
+
+[sub_resource type="Shader" id="Shader_1wfp4"]
+code = "shader_type canvas_item;
+render_mode unshaded;
+
+uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, repeat_disable,filter_nearest;
+uniform float pixel_size : hint_range(1.0, 16.0, 1.0) = 1.0;
+
+
+void fragment(){
+	float x = FRAGCOORD.x - mod(FRAGCOORD.x, pixel_size);
+	float y = FRAGCOORD.y - mod(FRAGCOORD.y, pixel_size);
+	COLOR = texture(SCREEN_TEXTURE, vec2(x,y) * SCREEN_PIXEL_SIZE);
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_al53x"]
+shader = SubResource("Shader_1wfp4")
+shader_parameter/pixel_size = 1.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_c1td2"]
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h276i"]
+bg_color = Color(0.858824, 0.00784314, 0.0235294, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_31gib"]
+bg_color = Color(1.44392e-07, 0.701049, 1.54018e-06, 1)
+
+[sub_resource type="Theme" id="Theme_5oqr1"]
+ProgressBar/styles/background = SubResource("StyleBoxFlat_h276i")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_31gib")
+
+[sub_resource type="LabelSettings" id="LabelSettings_wkr5c"]
+font_size = 36
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_wgxn4"]
+font_size = 22
+font_color = Color(0, 0, 0, 1)
+
+[node name="Player" type="Node3D" groups=["player"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("1_nr8c4")
+
+[node name="WalkSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_2dmr2")
+volume_db = -20.0
+pitch_scale = 1.3
+
+[node name="PlayerController" type="CharacterBody3D" parent="."]
+unique_name_in_owner = true
+collision_mask = 17
+floor_max_angle = 0.174533
+script = ExtResource("1_6g4jr")
+SPEED = 4.0
+JUMP_VELOCITY = 0.0
+HEAD_BOB = false
+CLAMP_HEAD_ROTATION_MIN = 0.0
+CLAMP_HEAD_ROTATION_MAX = 0.0
+MOUSE_ACCEL = false
+KEY_BIND_MOUSE_SENS = 0.003
+
+[node name="Head" parent="PlayerController" instance=ExtResource("2_lreee")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.47262, -0.2695)
+
+[node name="RayCast3D" type="RayCast3D" parent="PlayerController/Head"]
+transform = Transform3D(1, 0, 0, 0, -5.12588e-08, -1, 0, 1.17266, -4.37114e-08, 0, -0.00865555, -0.0248379)
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerController"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.308752, 0)
+shape = SubResource("CapsuleShape3D_42pn1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerController/CollisionShape3D"]
+transform = Transform3D(1, 0, 0, 0, 1.31238, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_c7i67")
+
+[node name="inventory_manager" type="Node" parent="."]
+script = ExtResource("4_yb3jv")
+
+[node name="game_record" type="Timer" parent="."]
+process_mode = 3
+autostart = true
+script = SubResource("GDScript_gmqvr")
+
+[node name="GUI" type="Control" parent="."]
+material = SubResource("ShaderMaterial_al53x")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_l6ogn")
+script = ExtResource("7_phs7b")
+
+[node name="StaminBar" type="Control" parent="GUI"]
+layout_mode = 1
+anchor_left = 0.334
+anchor_right = 0.666
+anchor_bottom = 0.167
+offset_left = -427.52
+offset_top = 599.0
+offset_right = -426.48
+offset_bottom = 598.76
+grow_horizontal = 2
+
+[node name="Label" type="Label" parent="GUI/StaminBar"]
+layout_mode = 2
+offset_left = 31.0
+offset_top = 52.0
+offset_right = 426.0
+offset_bottom = 75.0
+text = "Стамина "
+label_settings = SubResource("LabelSettings_c1td2")
+
+[node name="MarginContainer" type="MarginContainer" parent="GUI/StaminBar"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_bottom = 25
+
+[node name="Stamina" type="ProgressBar" parent="GUI/StaminBar/MarginContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme = SubResource("Theme_5oqr1")
+step = 0.1
+value = 50.0
+show_percentage = false
+
+[node name="Tasks" type="Control" parent="GUI"]
+layout_mode = 1
+anchor_right = 0.334
+anchor_bottom = 0.167
+offset_right = -0.52002
+offset_bottom = -0.240005
+
+[node name="MarginContainer" type="MarginContainer" parent="GUI/Tasks"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.576
+anchor_bottom = 0.333
+offset_left = 5.0
+offset_top = 8.0
+offset_right = 30.048
+offset_bottom = 18.04
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_right = 5
+metadata/_edit_group_ = true
+
+[node name="Task" type="Label" parent="GUI/Tasks/MarginContainer"]
+layout_mode = 2
+text = "Исправлено работ 0/5"
+label_settings = SubResource("LabelSettings_wkr5c")
+
+[node name="Inventory" type="Control" parent="GUI"]
+layout_mode = 1
+anchor_left = 0.666
+anchor_right = 1.0
+anchor_bottom = 0.167
+offset_left = 0.52002
+offset_right = -1.0
+offset_bottom = -0.240005
+
+[node name="Bg" type="Panel" parent="GUI/Inventory"]
+layout_mode = 0
+offset_left = 159.0
+offset_top = 8.0
+offset_right = 420.0
+offset_bottom = 98.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GUI/Inventory/Bg"]
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 25
+alignment = 1
+
+[node name="Slot" type="Control" parent="GUI/Inventory/Bg/HBoxContainer"]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+script = ExtResource("8_44qu7")
+
+[node name="BG" type="ColorRect" parent="GUI/Inventory/Bg/HBoxContainer/Slot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ItemIcon" type="TextureRect" parent="GUI/Inventory/Bg/HBoxContainer/Slot"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Slot2" type="Control" parent="GUI/Inventory/Bg/HBoxContainer"]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+script = ExtResource("8_44qu7")
+
+[node name="BG" type="ColorRect" parent="GUI/Inventory/Bg/HBoxContainer/Slot2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ItemIcon" type="TextureRect" parent="GUI/Inventory/Bg/HBoxContainer/Slot2"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Slot3" type="Control" parent="GUI/Inventory/Bg/HBoxContainer"]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+script = ExtResource("8_44qu7")
+
+[node name="BG" type="ColorRect" parent="GUI/Inventory/Bg/HBoxContainer/Slot3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ItemIcon" type="TextureRect" parent="GUI/Inventory/Bg/HBoxContainer/Slot3"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Item" type="Label" parent="GUI/Inventory"]
+layout_mode = 0
+offset_left = 159.0
+offset_top = 98.0
+offset_right = 420.0
+offset_bottom = 132.0
+text = "Учебник"
+label_settings = SubResource("LabelSettings_wgxn4")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 1
+clip_text = true
+
+[node name="Cursor" type="ColorRect" parent="GUI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -3.0
+offset_top = -3.0
+offset_right = 3.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[connection signal="timeout" from="game_record" to="game_record" method="_on_timeout"]

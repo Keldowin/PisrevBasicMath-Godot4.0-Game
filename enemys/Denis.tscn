@@ -1,0 +1,70 @@
+[gd_scene load_steps=8 format=3 uid="uid://btpcf75l7w4pk"]
+
+[ext_resource type="Script" path="res://enemys/Denis.gd" id="1_qmjdo"]
+[ext_resource type="Texture2D" uid="uid://dr1twa88lncld" path="res://assets/textures/enemys/Denis/denis_idle.png" id="1_s17vs"]
+[ext_resource type="AudioStream" uid="uid://dca876weiu220" path="res://sounds/Denis/robber.mp3" id="3_u1lps"]
+[ext_resource type="Texture2D" uid="uid://cpvbpj4meppg3" path="res://assets/textures/graphics/shadow.png" id="4_gsvyc"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6ilvc"]
+radius = 0.28319
+height = 2.87469
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_264h2"]
+radius = 1.39467
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_holka"]
+radius = 2.62424
+
+[node name="denis" type="CharacterBody3D"]
+collision_mask = 16
+script = ExtResource("1_qmjdo")
+nav_agent_node = NodePath("NavigationAgent3D")
+range_node = NodePath("Range")
+movement_speed = 6.0
+
+[node name="Model" type="Sprite3D" parent="."]
+transform = Transform3D(0.367839, 0, 0, 0, 0.291741, 0, 0, 0, 0.209355, -0.0440464, 1.4993, -0.0224094)
+billboard = 2
+texture_filter = 0
+texture = ExtResource("1_s17vs")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_postprocessing = 1
+avoidance_enabled = true
+height = 0.28
+radius = 0.6
+use_3d_avoidance = true
+debug_enabled = true
+debug_use_custom = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.44936, 0)
+shape = SubResource("CapsuleShape3D_6ilvc")
+
+[node name="Range" type="Area3D" parent="."]
+collision_layer = 17
+collision_mask = 17
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Range"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.63627, -0.0501831)
+shape = SubResource("SphereShape3D_264h2")
+
+[node name="sound" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.56515, 0)
+stream = ExtResource("3_u1lps")
+volume_db = -20.0
+max_distance = 60.0
+attenuation_filter_db = 0.0
+
+[node name="grab_area" type="Area3D" parent="."]
+
+[node name="collision_shape_3d" type="CollisionShape3D" parent="grab_area"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.83506, 0)
+shape = SubResource("SphereShape3D_holka")
+
+[node name="shadow" type="Sprite3D" parent="."]
+transform = Transform3D(0.693455, 0, 0, 0, -3.03119e-08, -0.693455, 0, 0.693455, -3.03119e-08, 0, 0.05, 0)
+modulate = Color(1, 1, 1, 0.352941)
+texture_filter = 0
+render_priority = -1
+texture = ExtResource("4_gsvyc")

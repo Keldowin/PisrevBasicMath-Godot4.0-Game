@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://b4a7pth5myb4c"]
+
+[ext_resource type="Texture2D" uid="uid://b6xgv1ic4yb0d" path="res://assets/textures/wood/oak_veneer_01_diff_1k.jpg" id="1_dysb6"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_e5lwb"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1f7mh"]
+albedo_color = Color(0.411765, 0.411765, 0.411765, 1)
+albedo_texture = ExtResource("1_dysb6")
+uv1_scale = Vector3(0.5, 0.5, 0.5)
+uv1_triplanar = true
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_cc2xx"]
+data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
+
+[node name="wood" type="MeshInstance3D"]
+mesh = SubResource("BoxMesh_e5lwb")
+surface_material_override/0 = SubResource("StandardMaterial3D_1f7mh")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_cc2xx")
